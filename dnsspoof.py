@@ -6,6 +6,7 @@ from scapy.all import *
 import argparse
 import threading
 import signal
+val = 0
 
 def arg_parser():
     parser = argparse.ArgumentParser()
@@ -31,7 +32,8 @@ def restore(routerIP, victimIP, routerMAC, victimMAC):
     send(ARP(op=2, pdst=victimIP, psrc=routerIP, hwdst="ff:ff:ff:ff:ff:ff", hwsrc=routerMAC), count=3)
     sys.exit(0)
 
-def cb(payload):
+def cb(val,payload):
+    print "Integer value generated during browser request is: ",val
     data = payload.get_data()
     pkt = IP(data)
     localIP = [x[4] for x in scapy.all.conf.route.routes if x[2] != '0.0.0.0'][0]
